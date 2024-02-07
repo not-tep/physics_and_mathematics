@@ -83,7 +83,7 @@ class Fraction():
         )
 
 
-if __name__ == 'main':
+if __name__ == '__main__':
     a1 = Fraction(5, 10)
     a2 = Fraction(20, 30)
     a3 = Fraction(5, 6)
