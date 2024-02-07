@@ -1,6 +1,8 @@
 class t():
+    @staticmethod
     def from_Celsius_to_Fahrenheit(c: float) -> float:
         return c * 9 / 5 + 32
+    @staticmethod
     def from_Fahrenheit_to_Celsius(f: float) -> float:
         return (f - 32) * 5 / 9
     
