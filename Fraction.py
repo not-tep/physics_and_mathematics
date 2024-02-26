@@ -1,38 +1,40 @@
 import math
 
 
-class Fraction():
+class F():
     def __init__( # Просто __init__
         self, 
-        numerator: int = None, # Числитель 
-        denominator: int = None # Знаменатель
+        a: int = 0, # Целая часть
+        b: int = 0, # Числитель 
+        c: int = 1  # Знаменатель
     ) -> None:
-        if not numerator:
-            self.numerator = self.get_field('числитель')
-        else:
-            self.numerator = numerator
-        
-        if not denominator:
-            self.denominator = self.get_field('знаменатель')
-        else:
-            self.denominator = denominator
+        self.numerator = b
+        self.denominator = c
 
         self.reduce()
+        self.replace_whole(a)
     def __repr__(self) -> str: # Просто __repr__
-        return f'Fraction: {self.numerator}/{self.denominator}'
+        info = self.get_whole()
+        if info[0] == 0:
+            return f'Fraction: {info[1]}/{info[2]}'
+        if info[1] == 0:
+            return f'Whole numder: {info[0]}'
+        return f'Fraction: {info[0]} {info[1]}/{info[2]}'
 
-    def get_field(self, str_) -> int: # Запросить у пользователя числитель/знаменатель
-        while True:
-            n = input(f'Введите {str_}:')
-            try:
-                n = int(n)
-                return n
-            except ValueError:
-                print('Ошибка ввода! Повторите попытку.')
     def reduce(self) -> None: # Сократить
         gcd = math.gcd(self.numerator, self.denominator)
         self.numerator //= gcd
         self.denominator //= gcd
+
+    # Целая часть
+    def replace_whole(self, whole) -> None:
+        self.numerator += whole * self.denominator
+    def get_whole(self) -> tuple[int, int, int]:
+        return (
+            self.numerator // self.denominator,                  # Целая часть
+            self.numerator - self.numerator // self.denominator, # Числитель
+            self.denominator                                     # Знаменатель
+        )
 
     # Вывод данных
     def return_numerator(self) -> int:
@@ -40,7 +42,8 @@ class Fraction():
     def return_denominator(self) -> int:
         return self.denominator
     def return_info(self) -> tuple[int, int]:
-        return (self.numerator, self.denominator)
+        info = self.get_whole()
+        return (info[0], {info[1]}, {info[2]})
 
     # Арифметические действия
     def __find_common_denominator(self, other): # Найти общий знаменатель
@@ -55,39 +58,33 @@ class Fraction():
         other.denominator *= other_additional_multiplier
         
         return other
-    def __add__(self, other) -> "Fraction": #     +  Сложение
+    def __add__(self, other) -> "F": #      +  Сложение
         other = self.__find_common_denominator(other)
 
-        return Fraction(
-            numerator = self.numerator + other.numerator, 
-            denominator = self.denominator
+        return F(
+            b = self.numerator + other.numerator, 
+            c = self.denominator
         )
-    def __sub__(self, other) -> "Fraction": #     -  Вычитание
+    def __sub__(self, other) -> "F": #      -  Вычитание
         other = self.__find_common_denominator(other)
 
-        return Fraction(
-            numerator = self.numerator - other.numerator, 
-            denominator = self.denominator
+        return F(
+            b = self.numerator - other.numerator, 
+            c = self.denominator
         )
-    def __mul__(self, other) -> "Fraction": #     *  Умножение
-        return Fraction(
-            numerator = self.numerator * other.numerator,
-            denominator = self.denominator * other.denominator
+    def __mul__(self, other) -> "F": #      *  Умножение
+        return F(
+            b = self.numerator * other.numerator,
+            c = self.denominator * other.denominator
         )
-    def __truediv__(self, other) -> "Fraction":#  :  
+    def __truediv__(self, other) -> "F": #  :  Деление
         return self.__mul__(
-            Fraction(
-                numerator = other.denominator,
-                denominator = other.numerator
+            F(
+                b = other.denominator,
+                c = other.numerator
             )
         )
 
 
 if __name__ == '__main__':
-    a1 = Fraction(5, 10)
-    a2 = Fraction(20, 30)
-    a3 = Fraction(5, 6)
-    a4 = Fraction(9, 4)
-    a5 = Fraction(3, 1)
-
-    print((a1 + a2 - a3) * a4 / a5)
+    print(F(1, 1, 3) / F(4) - F(b = 2, c = 3) * F(b = 1, c = 24))
