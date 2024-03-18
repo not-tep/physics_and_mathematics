@@ -32,7 +32,7 @@ class F():
     def get_whole(self) -> tuple[int, int, int]:
         return (
             self.numerator // self.denominator,                  # Целая часть
-            self.numerator - self.numerator // self.denominator, # Числитель
+            self.numerator - self.numerator // self.denominator * self.denominator, # Числитель
             self.denominator                                     # Знаменатель
         )
 
@@ -87,4 +87,4 @@ class F():
 
 
 if __name__ == '__main__':
-    print(F(2, 1, 6) - (F(b = 5, c = 12) + F(1, 1, 2)))
+    print((F(30) / F(27) - F(0, 1, 3)) * F(2, 1, 7) + F(0, 2, 5))
